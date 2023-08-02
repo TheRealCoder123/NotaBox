@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">NotaBox</string>
+    <string name="menu">Menu</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="add">Add</string>
+    <string name="nav_icon">nav_icon</string>
+    <string name="settings">Settings</string>
+    <string name="close">Close</string>
+    <string name="choose_an_image">Choose an image</string>
+    <string name="add_a_text">Add a text</string>
+    <string name="add_a_check_list">Add a check list</string>
+    <string name="attach_a_file">Attach a file</string>
+    <string name="add_audio_file">Add audio file</string>
+    <string name="more">More</string>
+    <string name="done">Done</string>
+    <string name="delete_file">Delete File</string>
+    <string name="comment">Add a comment</string>
+    <string name="delete_folder">Delete Folder</string>
+    <string name="rename_folder">Rename Folder</string>
+    <string name="pin_folder">Pin Folder</string>
+    <string name="close_folder_editor">Close Folder Editor</string>
+    <string name="pinned_folder">Pinned Folder</string>
+    <string name="app_logo">App Logo</string>
 </resources>
