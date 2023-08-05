@@ -20,7 +20,6 @@ import androidx.navigation.compose.rememberNavController
 import com.upnext.notabox.R
 import com.upnext.notabox.common.Constants
 import com.upnext.notabox.common.TestTags
-import com.upnext.notabox.presentation.activities.MainActivity.components.FAB.CreateNoteFab
 import com.upnext.notabox.presentation.activities.MainActivity.components.MainViewModel
 import com.upnext.notabox.presentation.activities.MainActivity.components.NavigationDrawer.DrawerBody
 import com.upnext.notabox.presentation.activities.MainActivity.components.NavigationDrawer.DrawerHeader
@@ -62,7 +61,7 @@ import kotlinx.coroutines.launch
 
      when(currentDestination?.route){
          MainNavigationRoutes.NotesScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Notes
-         MainNavigationRoutes.ToDosScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.TO_DOS
+         MainNavigationRoutes.TasksScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.TO_DOS
          MainNavigationRoutes.PrioritiesScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Priorities
          MainNavigationRoutes.FoldersScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Folders
          MainNavigationRoutes.SettingsScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Settings
@@ -153,7 +152,7 @@ import kotlinx.coroutines.launch
                              navController.navigate(MainNavigationRoutes.NotesScreenRoute.route)
                          }
                          NavDrawerItemType.TO_DOS -> {
-                             navController.navigate(MainNavigationRoutes.ToDosScreenRoute.route)
+                             navController.navigate(MainNavigationRoutes.TasksScreenRoute.route)
                          }
                          NavDrawerItemType.Priorities -> {
                              navController.navigate(MainNavigationRoutes.PrioritiesScreenRoute.route)
@@ -171,7 +170,7 @@ import kotlinx.coroutines.launch
                  }
              )
          },
-         drawerGesturesEnabled = if (currentDestination?.route == MainNavigationRoutes.NotesScreenRoute.route || currentDestination?.route == MainNavigationRoutes.ToDosScreenRoute.route) true else scaffoldState.drawerState.isOpen
+         drawerGesturesEnabled = if (currentDestination?.route == MainNavigationRoutes.NotesScreenRoute.route || currentDestination?.route == MainNavigationRoutes.TasksScreenRoute.route) true else scaffoldState.drawerState.isOpen
      ) {
          it
          MainNavigationGraph(navHostController = navController)

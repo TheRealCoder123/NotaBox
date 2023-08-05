@@ -48,7 +48,6 @@ class NotesScreenTest {
                     composable(MainNavigationRoutes.NotesScreenRoute.route){
                         NotesScreen(
                             navController =  navHostController,
-                            selectedFolderId = folderId
                         )
                     }
                 }

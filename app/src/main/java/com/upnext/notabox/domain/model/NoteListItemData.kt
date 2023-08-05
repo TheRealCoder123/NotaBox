@@ -2,7 +2,7 @@ package com.upnext.notabox.domain.model
 
 import com.upnext.notabox.data.enitities.Note
 import com.upnext.notabox.data.enitities.Priority
-import com.upnext.notabox.domain.util.NoteDataType
+import com.upnext.notabox.domain.enums.NoteDataType
 
 data class NoteListItemData(
     val id: String,

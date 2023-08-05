@@ -12,7 +12,7 @@ import com.upnext.notabox.presentation.note_view_screen.CreateNoteScreen
 import com.upnext.notabox.presentation.folders_screen.FoldersScreen
 import com.upnext.notabox.presentation.notes_screen.NotesScreen
 import com.upnext.notabox.presentation.priorities_sceen.PrioritiseScreen
-import com.upnext.notabox.presentation.to_do_screen.ToDosScreen
+import com.upnext.notabox.presentation.task_screen.TasksScreen
 
 @Composable
 fun MainNavigationGraph(navHostController: NavHostController){
@@ -23,8 +23,8 @@ fun MainNavigationGraph(navHostController: NavHostController){
         composable(MainNavigationRoutes.NotesScreenRoute.route){
             NotesScreen(navController = navHostController)
         }
-        composable(MainNavigationRoutes.ToDosScreenRoute.route){
-            ToDosScreen()
+        composable(MainNavigationRoutes.TasksScreenRoute.route){
+            TasksScreen()
         }
         composable(MainNavigationRoutes.PrioritiesScreenRoute.route){
             PrioritiseScreen()

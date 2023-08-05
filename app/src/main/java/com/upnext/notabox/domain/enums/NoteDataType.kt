@@ -1,4 +1,4 @@
-package com.upnext.notabox.domain.util
+package com.upnext.notabox.domain.enums
 
 enum class NoteDataType {
     Image,

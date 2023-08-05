@@ -1,6 +1,6 @@
 package com.upnext.notabox.domain.model
 
-import com.upnext.notabox.domain.util.NoteDataType
+import com.upnext.notabox.domain.enums.NoteDataType
 
 data class NoteData(
     val order: Int,

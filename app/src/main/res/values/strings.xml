@@ -22,4 +22,5 @@
     <string name="close_folder_editor">Close Folder Editor</string>
     <string name="pinned_folder">Pinned Folder</string>
     <string name="app_logo">App Logo</string>
+    <string name="today_s_tasks">Today\'s Tasks</string>
 </resources>

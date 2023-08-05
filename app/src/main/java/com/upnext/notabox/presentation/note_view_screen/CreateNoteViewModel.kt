@@ -20,7 +20,7 @@ import com.upnext.notabox.domain.model.NoteCheckBox
 import com.upnext.notabox.domain.model.NoteData
 import com.upnext.notabox.domain.model.TextNoteData
 import com.upnext.notabox.domain.repository.NoteRepository
-import com.upnext.notabox.domain.util.NoteDataType
+import com.upnext.notabox.domain.enums.NoteDataType
 import com.upnext.notabox.presentation.note_view_screen.events.CreateNoteEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

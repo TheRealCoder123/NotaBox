@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.runtime.Composable
@@ -19,7 +20,10 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import com.upnext.notabox.domain.model.NoteCheckBox
 import com.upnext.notabox.presentation.note_view_screen.CreateNoteViewModel
 import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
@@ -30,6 +34,7 @@ fun NoteCheckBoxItem(
     onCheck: (data: NoteCheckBox?, checked: Boolean) -> Unit,
     onTitleChange: (data: NoteCheckBox) -> Unit
 ) {
+
 
     var checkedState by remember {
         mutableStateOf(checkBoxData?.done ?: false)
