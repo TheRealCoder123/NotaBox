@@ -95,17 +95,17 @@ fun NoteItem(
 
                 note.image?.let {
 
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(NotaBoxTheme.spaces.medium))
-                            .size(50.dp)
-                    ){
-                        GlideImage(
-                            model = it,
-                            contentDescription = "Note Image",
-                            contentScale = ContentScale.FillBounds,
-                        )
-                    }
+//                    Box(
+//                        modifier = Modifier
+//                            .clip(RoundedCornerShape(NotaBoxTheme.spaces.medium))
+//                            .size(50.dp)
+//                    ){
+//                        GlideImage(
+//                            model = it.imageUri,
+//                            contentDescription = "Note Image",
+//                            contentScale = ContentScale.Fit,
+//                        )
+//                    }
 
 
                 }

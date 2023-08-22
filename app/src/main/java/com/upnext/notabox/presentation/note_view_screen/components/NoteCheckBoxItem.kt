@@ -1,5 +1,8 @@
 package com.upnext.notabox.presentation.note_view_screen.components
 
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +18,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -28,11 +33,14 @@ import com.upnext.notabox.domain.model.NoteCheckBox
 import com.upnext.notabox.presentation.note_view_screen.CreateNoteViewModel
 import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
 
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NoteCheckBoxItem(
     checkBoxData: NoteCheckBox?,
     onCheck: (data: NoteCheckBox?, checked: Boolean) -> Unit,
-    onTitleChange: (data: NoteCheckBox) -> Unit
+    onTitleChange: (data: NoteCheckBox) -> Unit,
+    onDelete: (NoteCheckBox) -> Unit,
+    onLongClick: () -> Unit
 ) {
 
 
@@ -56,7 +64,13 @@ fun NoteCheckBoxItem(
 
     if (checkBoxData != null){
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = {
+                        onLongClick()
+                    }
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -83,6 +97,11 @@ fun NoteCheckBoxItem(
                                   titleTextState = ""
                               }
                           }
+                    }.onKeyEvent {event ->
+                        if (event.key == Key.Backspace && titleTextState.isEmpty()) {
+                            onDelete(checkBoxData)
+                        }
+                        true
                     },
                 value = titleTextState,
                 onValueChange = { newText -> titleTextState = newText },

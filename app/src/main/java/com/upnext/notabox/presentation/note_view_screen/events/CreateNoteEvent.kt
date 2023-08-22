@@ -4,6 +4,8 @@ import com.upnext.notabox.data.enitities.Note
 import com.upnext.notabox.domain.model.FileNoteData
 import com.upnext.notabox.domain.model.NoteCheckBox
 import com.upnext.notabox.domain.model.NoteData
+import com.upnext.notabox.domain.model.NoteImage
+import com.upnext.notabox.domain.model.NoteImageSize
 import com.upnext.notabox.domain.model.TextNoteData
 
 sealed class CreateNoteEvent {
@@ -22,4 +24,7 @@ sealed class CreateNoteEvent {
     data class UpdateNoteText(val data: TextNoteData) : CreateNoteEvent()
     data class UpdateCheckBox(val data: NoteCheckBox) : CreateNoteEvent()
     data class DeleteNoteData(val noteData: NoteData) : CreateNoteEvent()
+    data class UpdateNoteImageSize(val image: NoteImage) : CreateNoteEvent()
+    data class NoteDataMoveUp(val movingNoteData: NoteData?) : CreateNoteEvent()
+    data class NoteDataMoveDown(val movingNoteData: NoteData?) : CreateNoteEvent()
 }

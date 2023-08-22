@@ -8,11 +8,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.FormatSize
+import androidx.compose.material.icons.filled.PhotoSizeSelectActual
+import androidx.compose.material.icons.filled.PhotoSizeSelectLarge
+import androidx.compose.material.icons.filled.PhotoSizeSelectSmall
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.upnext.notabox.R
+import com.upnext.notabox.domain.model.NoteImage
+import com.upnext.notabox.domain.model.NoteImageSize
 import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
 
 @Composable
@@ -20,13 +26,31 @@ fun EditImageBottomMenu(
     onDelete: () -> Unit,
     onAddComment: () -> Unit,
     onClose: () -> Unit,
+    onResize: () -> Unit,
 ) {
+
 
     BottomNavigation(
         modifier = Modifier.fillMaxWidth(),
         backgroundColor = NotaBoxTheme.colors.background,
         elevation = NotaBoxTheme.spaces.medium
     ){
+
+        BottomNavigationItem(
+            selected = true,
+            onClick = {
+                onResize()
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.PhotoSizeSelectSmall,
+                    contentDescription = stringResource(R.string.resize_image),
+                    tint = NotaBoxTheme.colors.iconTint
+                )
+            },
+            selectedContentColor = Color.Black
+        )
+
         BottomNavigationItem(
             selected = true,
             onClick = {
@@ -41,6 +65,7 @@ fun EditImageBottomMenu(
             },
             selectedContentColor = Color.Black
         )
+
         BottomNavigationItem(
             selected = true,
             onClick = {

@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Notes
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,13 +25,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.upnext.notabox.common.TestTags
+import com.upnext.notabox.common.WindowInfo
 import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
 
 @Composable
 fun DrawerBody(
-    items: List<NavDrawerItem>,
-    selectedItem: NavDrawerItemType,
-    onClick: (NavDrawerItem) -> Unit
+    onClick: (NavDrawerItemType) -> Unit,
+    windowInfo: WindowInfo
 ) {
 
 
@@ -44,36 +48,92 @@ fun DrawerBody(
             verticalArrangement = Arrangement.Center
         ) {
 
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+                    .clickable {
+                        onClick(NavDrawerItemType.Notes)
+                    }
+                    .padding(vertical = NotaBoxTheme.spaces.medium)
+            ) {
 
-            items.forEach {item->
+                Icon(
+                    imageVector = Icons.Default.Notes,
+                    contentDescription = "Notes",
+                    tint = NotaBoxTheme.colors.text
+                )
+                Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.large))
+                Text(
+                    text = "Notes",
+                    color = NotaBoxTheme.colors.text,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .testTag("Notes")
+                )
 
+            }
+
+            Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.mediumLarge))
+
+            if (!windowInfo.isTablet){
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                         .clickable {
-                            onClick(item)
+                            onClick(NavDrawerItemType.Folders)
                         }
                         .padding(vertical = NotaBoxTheme.spaces.medium)
                 ) {
+
                     Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.title,
-                        tint = NotaBoxTheme.colors.text//if (selectedItem == item.type) NotaBoxTheme.colors.selected else NotaBoxTheme.colors.unSelected
+                        imageVector = Icons.Default.Folder,
+                        contentDescription = "Folders",
+                        tint = NotaBoxTheme.colors.text
                     )
                     Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.large))
                     Text(
-                        text = item.title,
-                        color = NotaBoxTheme.colors.text,//if (selectedItem == item.type) NotaBoxTheme.colors.selected else NotaBoxTheme.colors.unSelected,
+                        text = "Folders",
+                        color = NotaBoxTheme.colors.text,
                         fontSize = 20.sp,
                         modifier = Modifier
-                            .testTag(item.type.name)
+                            .testTag("Folders")
                     )
-                }
 
-                Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.mediumLarge))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.mediumLarge))
+
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+                    .clickable {
+                        onClick(NavDrawerItemType.Settings)
+                    }
+                    .padding(vertical = NotaBoxTheme.spaces.medium)
+            ) {
+
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Settings",
+                    tint = NotaBoxTheme.colors.text
+                )
+                Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.large))
+                Text(
+                    text = "Settings",
+                    color = NotaBoxTheme.colors.text,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .testTag("Settings")
+                )
 
             }
+
+            Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.mediumLarge))
+
         }
 
 

@@ -1,5 +1,5 @@
 package com.upnext.notabox.domain.enums
 
 enum class CurrentNoteOptionShown {
-    Default, EDIT_FILE, EDIT_IMAGE
+    Default, EDIT_FILE, EDIT_IMAGE, MOVE_NOTE_DATA
 }

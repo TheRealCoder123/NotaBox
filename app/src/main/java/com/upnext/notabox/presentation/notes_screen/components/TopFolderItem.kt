@@ -1,7 +1,6 @@
 package com.upnext.notabox.presentation.notes_screen.components
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Attachment
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,6 +35,7 @@ fun TopFolderItem(
     folder: Folder?,
     isAllShown: Boolean = false,
     isSelected: Boolean,
+    isAllFoldersBtnShown: Boolean = false,
     onClick: (Folder?) -> Unit
 ) {
 
@@ -82,7 +81,7 @@ fun TopFolderItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if (isAllShown) "All" else folder?.folderName ?: "Null Folder",
+                text = if (isAllShown) "All" else if(isAllFoldersBtnShown) "All Folders" else folder?.folderName ?: "Null Folder",
                 color = selectedTintColorAnim
             )
             if (folder?.isPinned == true) {

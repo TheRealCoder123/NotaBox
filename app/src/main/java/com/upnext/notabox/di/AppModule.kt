@@ -5,10 +5,12 @@ import androidx.room.Room
 import com.upnext.notabox.data.data_source.NotaBoxDatabase
 import com.upnext.notabox.data.repository.IFolderRepository
 import com.upnext.notabox.data.repository.INoteRepository
+import com.upnext.notabox.data.repository.IPriorityRepository
 import com.upnext.notabox.data.repository.ITaskRepository
 import com.upnext.notabox.domain.model.NotesUseCases
 import com.upnext.notabox.domain.repository.FolderRepository
 import com.upnext.notabox.domain.repository.NoteRepository
+import com.upnext.notabox.domain.repository.PriorityRepository
 import com.upnext.notabox.domain.repository.TaskRepository
 import com.upnext.notabox.domain.use_case.SearchNotes.SearchNotes
 import com.upnext.notabox.domain.use_case.SearchNotes.SearchNotesByFolder
@@ -50,6 +52,12 @@ object AppModule {
     @Singleton
     fun provideTaskRepository(db: NotaBoxDatabase) : TaskRepository {
         return ITaskRepository(db.noteDao)
+    }
+
+    @Provides
+    @Singleton
+    fun providePriorityRepository(db: NotaBoxDatabase) : PriorityRepository {
+        return IPriorityRepository(db.noteDao)
     }
 
     @Provides

@@ -10,7 +10,7 @@ data class NoteListItemData(
     val timestamp: Long,
     val priority: Priority?,
     val folderId: Int,
-    val image: String?,
+    val image: NoteImage?,
     val hasAudioFiles: Boolean,
     val hasMindMap: Boolean,
     val hasCheckBoxList: Boolean,
@@ -29,7 +29,7 @@ data class NoteListItemData(
            var texts = emptyList<NoteData>()
 
            val imageList = noteData.filter { it.type == NoteDataType.Image }
-           val image = if (imageList.isNotEmpty()) imageList[0].imageUri else null
+           val image = if (imageList.isNotEmpty()) imageList[0].image else null
            if(noteData.any { it.type == NoteDataType.Text }){
                texts = noteData.filter { it.type == NoteDataType.Text }
            }

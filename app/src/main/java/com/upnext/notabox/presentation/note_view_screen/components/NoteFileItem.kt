@@ -41,6 +41,7 @@ import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
 fun NoteFileItem(
     file: FileNoteData?,
     onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
 
     if (file != null) {
@@ -54,6 +55,9 @@ fun NoteFileItem(
                 .combinedClickable(
                     onClick = {
                         onClick()
+                    },
+                    onLongClick = {
+                        onLongClick()
                     }
                 )
         ) {

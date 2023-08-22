@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Print
+import androidx.compose.material.icons.filled.PriorityHigh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +33,8 @@ import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
 @Composable
 fun MoreCreateNoteMenu(
     onDeleteNoteClicked: () -> Unit,
-    onAddToFolder: () -> Unit
+    onAddToFolder: () -> Unit,
+    onAddPriorityToNote: () -> Unit
 ) {
     Box(modifier = Modifier
         .fillMaxSize()
@@ -54,50 +56,78 @@ fun MoreCreateNoteMenu(
                     style = NotaBoxTheme.typography.title,
                 )
                 Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.mediumLarge))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(NotaBoxTheme.spaces.medium))
-                        .background(NotaBoxTheme.colors.searchTFOuterBackground)
-                        .padding(NotaBoxTheme.spaces.mediumLarge),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Map,
-                        contentDescription = "Create Mind Map",
-                        tint = NotaBoxTheme.colors.iconTint
-                    )
-                    Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.mediumLarge))
-                    Text(
-                        text = "Create mind map",
-                        color = NotaBoxTheme.colors.text
-                    )
-                }
+//                Not in first version
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .clip(RoundedCornerShape(NotaBoxTheme.spaces.medium))
+//                        .background(NotaBoxTheme.colors.searchTFOuterBackground)
+//                        .padding(NotaBoxTheme.spaces.mediumLarge),
+//                    horizontalArrangement = Arrangement.Start,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Default.Map,
+//                        contentDescription = "Create Mind Map",
+//                        tint = NotaBoxTheme.colors.iconTint
+//                    )
+//                    Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.mediumLarge))
+//                    Text(
+//                        text = "Create mind map",
+//                        color = NotaBoxTheme.colors.text
+//                    )
+//                }
+//
+//                Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.medium))
+//                Not in first version
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .clip(RoundedCornerShape(NotaBoxTheme.spaces.medium))
+//                        .background(NotaBoxTheme.colors.searchTFOuterBackground)
+//                        .padding(NotaBoxTheme.spaces.mediumLarge),
+//                    horizontalArrangement = Arrangement.Start,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Default.Print,
+//                        contentDescription = "Print Note",
+//                        tint = NotaBoxTheme.colors.iconTint
+//                    )
+//                    Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.mediumLarge))
+//                    Text(
+//                        text = "Print",
+//                        color = NotaBoxTheme.colors.text
+//                    )
+//                }
 
                 Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.medium))
 
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(NotaBoxTheme.spaces.medium))
                         .background(NotaBoxTheme.colors.searchTFOuterBackground)
-                        .padding(NotaBoxTheme.spaces.mediumLarge),
+                        .padding(NotaBoxTheme.spaces.mediumLarge)
+                        .clickable {
+                            onAddPriorityToNote()
+                        },
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Print,
-                        contentDescription = "Print Note",
+                        imageVector = Icons.Default.PriorityHigh,
+                        contentDescription = "Add a priority",
                         tint = NotaBoxTheme.colors.iconTint
                     )
                     Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.mediumLarge))
                     Text(
-                        text = "Print",
+                        text = "Add a priority",
                         color = NotaBoxTheme.colors.text
                     )
                 }
+
 
                 Spacer(modifier = Modifier.height(NotaBoxTheme.spaces.medium))
 

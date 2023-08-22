@@ -42,7 +42,8 @@ fun NoteAudioPlayer(
     onStopPlaying: () -> Unit,
     isPlaying: Boolean,
     currentlyPlayingAudio: String?,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onLongClick: () -> Unit
 ) {
 
 
@@ -69,6 +70,9 @@ fun NoteAudioPlayer(
                     onStopPlaying()
                 else
                     onStartPlaying(Uri.parse(fileUri))
+            },
+            onLongClick = {
+                onLongClick()
             }
         )
     ){

@@ -1,5 +1,6 @@
 package com.upnext.notabox.presentation.notes_screen
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,6 +36,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.upnext.notabox.common.Constants
 import com.upnext.notabox.common.TestTags
+import com.upnext.notabox.common.rememberWindowInfo
+import com.upnext.notabox.presentation.activities.CreateViewNotesActivity.NoteActivity
 import com.upnext.notabox.presentation.activities.MainActivity.components.FAB.CreateNoteFab
 import com.upnext.notabox.presentation.global_components.SearchTextField
 import com.upnext.notabox.presentation.navigation.MainNavigationRoutes
@@ -51,7 +55,9 @@ fun NotesScreen(
     val state = notesViewModel.state.value
 
     val lazyColumnState = rememberLazyListState()
+    val windowInfo = rememberWindowInfo()
 
+    val context = LocalContext.current
 
     val size by animateDpAsState(
         targetValue = if(state.isOrderSectionVisible) 100.dp else 0.dp,
@@ -72,18 +78,20 @@ fun NotesScreen(
         backgroundColor = NotaBoxTheme.colors.background,
         floatingActionButton = {
             CreateNoteFab {
-                navController.navigate(
-                    MainNavigationRoutes.CreateNoteScreenRoute.route
-                            + "/${Constants.CREATE_NOTE_PARAM_PASSED_TO_CREATE_NOTE_SCREEN}"
-                            + "/${notesViewModel.selectedFolder?.id ?: Constants.ADD_NOTE_TO_FOLDER_PARAM_PASSED_TO_CREATE_NOTE_SCREEN_IS_MINUS_ONE}"
+                val intent = Intent(context, NoteActivity::class.java)
+                intent.putExtra(Constants.NOTE_ID_TO_CREATE_NOTE_SCREEN, Constants.CREATE_NOTE_PARAM_PASSED_TO_CREATE_NOTE_SCREEN)
+                intent.putExtra(
+                    Constants.FOLDER_ID_TO_CREATE_NOTE_SCREEN_IF_IS_CURRENTLY_FOLDER_SELECTED,
+                    notesViewModel.selectedFolder?.id ?: Constants.ADD_NOTE_TO_FOLDER_PARAM_PASSED_TO_CREATE_NOTE_SCREEN_IS_MINUS_ONE
                 )
+                context.startActivity(intent)
             }
         }
     ) {
-        it
 
         LazyColumn(
             modifier = Modifier
+                .padding(it)
                 .testTag(TestTags.NOTES_SCREEN_TEST_TAG)
                 .fillMaxSize(),
             state = lazyColumnState,
@@ -156,13 +164,30 @@ fun NotesScreen(
                             }
                         )
                     }
+                    if (!windowInfo.isTablet){
+                        item{
+                            Spacer(modifier = Modifier.width(NotaBoxTheme.spaces.medium))
+                            TopFolderItem(
+                                folder = null,
+                                isAllShown = false,
+                                isSelected = false,
+                                isAllFoldersBtnShown = true,
+                                onClick = {
+                                    navController.navigate(MainNavigationRoutes.FoldersScreenRoute.route)
+                                }
+                            )
+                        }
+                    }
                 }
             }
 
 
             items(state.notes){
-                NoteItem(note = it){
-                    navController.navigate(MainNavigationRoutes.CreateNoteScreenRoute.route + "/${it.id}" + "/${Constants.ADD_NOTE_TO_FOLDER_PARAM_PASSED_TO_CREATE_NOTE_SCREEN_IS_MINUS_ONE}")
+                NoteItem(note = it){ noteListItemData ->
+                    val intent = Intent(context, NoteActivity::class.java)
+                    intent.putExtra(Constants.NOTE_ID_TO_CREATE_NOTE_SCREEN, noteListItemData.id)
+                    intent.putExtra(Constants.FOLDER_ID_TO_CREATE_NOTE_SCREEN_IF_IS_CURRENTLY_FOLDER_SELECTED, Constants.ADD_NOTE_TO_FOLDER_PARAM_PASSED_TO_CREATE_NOTE_SCREEN_IS_MINUS_ONE)
+                    context.startActivity(intent)
                 }
             }
 

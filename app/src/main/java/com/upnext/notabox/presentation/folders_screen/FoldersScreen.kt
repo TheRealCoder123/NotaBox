@@ -56,8 +56,8 @@ import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
 @Composable
 fun FoldersScreen (
     onEvent: (FolderEvent) -> Unit,
-    navHostController: NavHostController,
     state: FolderScreenState,
+    isDisplayedInDrawer: Boolean = false
 ) {
 
     val context = LocalContext.current
@@ -105,7 +105,7 @@ fun FoldersScreen (
     )
 
     Scaffold(
-        backgroundColor = NotaBoxTheme.colors.background,
+        backgroundColor = if (isDisplayedInDrawer) NotaBoxTheme.colors.dialogBgColor else NotaBoxTheme.colors.background,
         bottomBar = {
             AnimatedVisibility(
                 visible = isFolderEditorVisible,
@@ -197,6 +197,7 @@ fun FoldersScreen (
                         .padding(vertical = NotaBoxTheme.spaces.mediumLarge)
                         .clickable {
                             isCreateDialogON = !isCreateDialogON
+                            isRenamingFolder = false
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -229,7 +230,6 @@ fun FoldersScreen (
 fun FolderScreenPreview() {
     FoldersScreen(
         onEvent = {},
-        navHostController = rememberNavController(),
         state = FolderScreenState(
             folders = listOf(
                 Folder(

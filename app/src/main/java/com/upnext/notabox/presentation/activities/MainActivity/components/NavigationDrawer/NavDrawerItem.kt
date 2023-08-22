@@ -22,26 +22,20 @@ fun drawerItems() : List<NavDrawerItem> {
             "Notes",
             NavDrawerItemType.Notes
         ),
-        NavDrawerItem(
-            icon = Icons.Default.Checklist,
-            "To-Dos",
-            NavDrawerItemType.TO_DOS
-        ),
-        NavDrawerItem(
-            icon = Icons.Default.PriorityHigh,
-            "Priorities",
-            NavDrawerItemType.Priorities
-        ),
+//        NavDrawerItem(
+//            icon = Icons.Default.Checklist,
+//            "To-Dos",
+//            NavDrawerItemType.TO_DOS
+//        ),
         NavDrawerItem(
             icon = Icons.Default.Folder,
             "Folders",
             NavDrawerItemType.Folders
-        ),NavDrawerItem(
+        ),
+        NavDrawerItem(
             icon = Icons.Default.Settings,
             "Settings",
             NavDrawerItemType.Settings
-        ),
-
-
+        )
     )
 }

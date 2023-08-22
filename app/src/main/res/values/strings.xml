@@ -23,4 +23,8 @@
     <string name="pinned_folder">Pinned Folder</string>
     <string name="app_logo">App Logo</string>
     <string name="today_s_tasks">Today\'s Tasks</string>
+    <string name="resize_image">Resize Image</string>
+    <string name="back">Back</string>
+    <string name="move_up">Move Up</string>
+    <string name="move_down">Move Down</string>
 </resources>

@@ -3,6 +3,11 @@
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
@@ -14,20 +19,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.upnext.notabox.R
 import com.upnext.notabox.common.Constants
 import com.upnext.notabox.common.TestTags
+import com.upnext.notabox.common.rememberWindowInfo
 import com.upnext.notabox.presentation.activities.MainActivity.components.MainViewModel
 import com.upnext.notabox.presentation.activities.MainActivity.components.NavigationDrawer.DrawerBody
 import com.upnext.notabox.presentation.activities.MainActivity.components.NavigationDrawer.DrawerHeader
 import com.upnext.notabox.presentation.activities.MainActivity.components.NavigationDrawer.NavDrawerItemType
-import com.upnext.notabox.presentation.activities.MainActivity.components.NavigationDrawer.drawerItems
 import com.upnext.notabox.presentation.activities.MainActivity.components.TopAppBar.MainTopBar
 import com.upnext.notabox.presentation.activities.MainActivity.components.TopAppBar.TopBarActionItem
 import com.upnext.notabox.presentation.activities.MainActivity.components.TopAppBar.TopBarActionType
+import com.upnext.notabox.presentation.folders_screen.FolderViewModel
+import com.upnext.notabox.presentation.folders_screen.FoldersScreen
 import com.upnext.notabox.presentation.navigation.MainNavigationGraph
 import com.upnext.notabox.presentation.navigation.MainNavigationRoutes
 import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
@@ -52,17 +60,20 @@ import kotlinx.coroutines.launch
      val context = LocalContext.current
 
      val viewModel : MainViewModel = hiltViewModel()
+     val folderVm = hiltViewModel<FolderViewModel>()
+
+     val windowInfo = rememberWindowInfo()
 
      val scaffoldState = rememberScaffoldState()
      val scope = rememberCoroutineScope()
      val navController = rememberNavController()
 
+
      val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 
      when(currentDestination?.route){
          MainNavigationRoutes.NotesScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Notes
-         MainNavigationRoutes.TasksScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.TO_DOS
-         MainNavigationRoutes.PrioritiesScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Priorities
+         //MainNavigationRoutes.TasksScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Tasks
          MainNavigationRoutes.FoldersScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Folders
          MainNavigationRoutes.SettingsScreenRoute.route -> viewModel.selectedDrawerItem.value = NavDrawerItemType.Settings
      }
@@ -72,108 +83,137 @@ import kotlinx.coroutines.launch
          backgroundColor = NotaBoxTheme.colors.background,
          scaffoldState = scaffoldState,
          topBar = {
-             if (currentDestination?.route == MainNavigationRoutes.CreateNoteScreenRoute.route + "/{${Constants.NOTE_ID_TO_CREATE_NOTE_SCREEN}}" + "/{${Constants.FOLDER_ID_TO_CREATE_NOTE_SCREEN_IF_IS_CURRENTLY_FOLDER_SELECTED}}"){
-                 MainTopBar(
-                     onNavigationClicked = {
-                         navController.navigateUp()
-                     },
-                     navIcon = Icons.Default.ArrowBackIos,
-                     title = "Create Note",
-                     modifier = Modifier.testTag(TestTags.CREATE_NOTE_TOOL_BAR_TEST_TAG)
-                 )
-             }else {
-                 when(viewModel.selectedDrawerItem.value){
-                     NavDrawerItemType.Notes, NavDrawerItemType.TO_DOS -> {
-                         MainTopBar(
-                             items = listOf(
-                                 TopBarActionItem(
-                                     icon = Icons.Default.Settings,
-                                     context.getString(R.string.settings),
-                                     TopBarActionType.Settings
-                                 )
-                             ),
-                             onActionClicked = {
-                                 if (it.type == TopBarActionType.Settings){
+             when(viewModel.selectedDrawerItem.value){
+                 NavDrawerItemType.Notes, NavDrawerItemType.Tasks, NavDrawerItemType.Folders -> {
+                     MainTopBar(
+                         items = listOf(
+                             TopBarActionItem(
+                                 icon = Icons.Default.Settings,
+                                 context.getString(R.string.settings),
+                                 TopBarActionType.Settings
+                             )
+                         ),
+                         onActionClicked = {
+                             if (it.type == TopBarActionType.Settings){
 
-                                 }
-                             },
-                             onNavigationClicked = {
-                                 scope.launch {
-                                     scaffoldState.drawerState.open()
-                                 }
                              }
-                         )
-                     }
-                     NavDrawerItemType.Priorities -> {
-                         MainTopBar(
-                             onNavigationClicked = {
-                                 navController.navigateUp()
-                             },
-                             navIcon = Icons.Default.ArrowBackIos,
-                             title = "Priorities",
-                             modifier = Modifier.testTag(TestTags.PRIORITIES_TOOL_BAR_TEST_TAG)
-                         )
-                     }
-                     NavDrawerItemType.Folders -> {
-                         MainTopBar(
-                             onNavigationClicked = {
-                                 navController.navigateUp()
-                             },
-                             navIcon = Icons.Default.ArrowBackIos,
-                             title = "Folders",
-                             modifier = Modifier.testTag(TestTags.FOLDER_TOOL_BAR_TEST_TAG)
-
-                         )
-                     }
-                     NavDrawerItemType.Settings -> {
-                         MainTopBar(
-                             onNavigationClicked = {
-                                 navController.navigateUp()
-                             },
-                             navIcon = Icons.Default.ArrowBackIos,
-                             title = "Settings",
-                             modifier = Modifier.testTag(TestTags.SETTINGS_TOOL_BAR_TEST_TAG)
-                         )
-                     }
+                         },
+                         onNavigationClicked = {
+                             scope.launch {
+                                 scaffoldState.drawerState.open()
+                             }
+                         }
+                     )
+                 }
+                 NavDrawerItemType.Settings -> {
+                     MainTopBar(
+                         onNavigationClicked = {
+                             navController.navigateUp()
+                         },
+                         navIcon = Icons.Default.ArrowBackIos,
+                         title = "Settings",
+                         modifier = Modifier.testTag(TestTags.SETTINGS_TOOL_BAR_TEST_TAG)
+                     )
                  }
              }
          },
          drawerBackgroundColor = NotaBoxTheme.colors.drawerBgColor,
          drawerShape = RoundedCornerShape(topEnd = NotaBoxTheme.spaces.mediumLarge, bottomEnd = NotaBoxTheme.spaces.mediumLarge),
          drawerContent = {
-             DrawerHeader()
-             DrawerBody(
-                 items = drawerItems(),
-                 selectedItem = viewModel.selectedDrawerItem.value,
-                 onClick = {
-                     viewModel.selectedDrawerItem.value = it.type
-                     when(it.type){
-                         NavDrawerItemType.Notes -> {
-                             navController.navigate(MainNavigationRoutes.NotesScreenRoute.route)
+             if(!windowInfo.isTablet){
+                 DrawerHeader()
+                 DrawerBody(
+                     onClick = {
+                         viewModel.selectedDrawerItem.value = it
+                         when(it){
+                             NavDrawerItemType.Notes -> {
+                                 if (currentDestination?.route != MainNavigationRoutes.NotesScreenRoute.route){
+                                     navController.navigate(MainNavigationRoutes.NotesScreenRoute.route){
+                                         launchSingleTop = true
+                                         popUpTo(MainNavigationRoutes.NotesScreenRoute.route){
+                                             inclusive = true
+                                         }
+                                     }
+                                 }
+                             }
+                             NavDrawerItemType.Tasks -> {}
+                             NavDrawerItemType.Folders -> {
+                                 if (currentDestination?.route != MainNavigationRoutes.FoldersScreenRoute.route){
+                                     navController.navigate(MainNavigationRoutes.FoldersScreenRoute.route){
+                                         launchSingleTop = true
+                                         popUpTo(MainNavigationRoutes.FoldersScreenRoute.route){
+                                             inclusive = true
+                                         }
+                                     }
+                                 }
+                             }
+                             NavDrawerItemType.Settings -> {
+                                 navController.navigate(MainNavigationRoutes.SettingsScreenRoute.route)
+                             }
                          }
-                         NavDrawerItemType.TO_DOS -> {
-                             navController.navigate(MainNavigationRoutes.TasksScreenRoute.route)
+                         scope.launch {
+                             scaffoldState.drawerState.close()
                          }
-                         NavDrawerItemType.Priorities -> {
-                             navController.navigate(MainNavigationRoutes.PrioritiesScreenRoute.route)
-                         }
-                         NavDrawerItemType.Folders -> {
-                             navController.navigate(MainNavigationRoutes.FoldersScreenRoute.route)
-                         }
-                         NavDrawerItemType.Settings -> {
-                             navController.navigate(MainNavigationRoutes.SettingsScreenRoute.route)
+                     },
+                     windowInfo = windowInfo
+                 )
+             }else{
+                 Row(
+                     modifier = Modifier.fillMaxSize()
+                 ) {
+                     LazyColumn(
+                         modifier = Modifier
+                             .fillMaxHeight()
+                             .width(300.dp)
+                     ) {
+                         item {
+                             DrawerHeader()
+                             DrawerBody(
+                                 onClick = {
+                                     viewModel.selectedDrawerItem.value = it
+                                     when(it){
+                                         NavDrawerItemType.Notes -> {
+                                             if (currentDestination?.route != MainNavigationRoutes.NotesScreenRoute.route){
+                                                 navController.navigate(MainNavigationRoutes.NotesScreenRoute.route){
+                                                     launchSingleTop = true
+                                                     popUpTo(MainNavigationRoutes.NotesScreenRoute.route){
+                                                         inclusive = true
+                                                     }
+                                                 }
+                                             }
+                                         }
+                                         NavDrawerItemType.Tasks -> {}
+                                         NavDrawerItemType.Folders -> {}
+                                         NavDrawerItemType.Settings -> {
+                                             navController.navigate(MainNavigationRoutes.SettingsScreenRoute.route){
+                                                 popUpTo(MainNavigationRoutes.SettingsScreenRoute.route){
+                                                     inclusive = true
+                                                 }
+                                             }
+                                         }
+                                     }
+                                     scope.launch {
+                                         scaffoldState.drawerState.close()
+                                     }
+                                 },
+                                 windowInfo = windowInfo
+                             )
                          }
                      }
-                     scope.launch {
-                         scaffoldState.drawerState.close()
-                     }
+
+                     FoldersScreen(
+                         onEvent = { folderVm.onEvent(it) },
+                         state = folderVm.state.value,
+                         isDisplayedInDrawer = true
+                     )
+
                  }
-             )
+             }
          },
-         drawerGesturesEnabled = if (currentDestination?.route == MainNavigationRoutes.NotesScreenRoute.route || currentDestination?.route == MainNavigationRoutes.TasksScreenRoute.route) true else scaffoldState.drawerState.isOpen
+         drawerGesturesEnabled = if (currentDestination?.route == MainNavigationRoutes.NotesScreenRoute.route || currentDestination?.route == MainNavigationRoutes.FoldersScreenRoute.route) true else scaffoldState.drawerState.isOpen
      ) {
          it
-         MainNavigationGraph(navHostController = navController)
+         MainNavigationGraph(navHostController = navController, folderVm, viewModel)
      }
  }
 

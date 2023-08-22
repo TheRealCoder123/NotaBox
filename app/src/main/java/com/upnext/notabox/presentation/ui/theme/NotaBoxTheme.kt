@@ -7,11 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import com.upnext.notabox.presentation.activities.MainActivity.components.drag_and_drop.DragTargetInfo
 
 fun lightColors() = NotaBoxColors(
     primary = White,
@@ -75,6 +77,9 @@ val LocalColors = staticCompositionLocalOf { lightColors() }
 
 val LocalTypography = staticCompositionLocalOf { Typography() }
 
+internal val LocalDragTargetInfo = compositionLocalOf { DragTargetInfo() }
+
+
 object NotaBoxTheme {
     val colors: NotaBoxColors
         @Composable
@@ -105,6 +110,7 @@ fun NotaBoxTheme(
 
     val currentColors = remember { if (darkTheme) darkColors else colors }
     val rememberedColors = remember { currentColors.copy() }.apply { updateColorsFrom(currentColors) }
+    val dragState = remember { DragTargetInfo() }
 
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -119,6 +125,7 @@ fun NotaBoxTheme(
         LocalColors provides rememberedColors,
         LocalSpaces provides spaces,
         LocalTypography provides typography,
+        LocalDragTargetInfo provides dragState
     ) {
         ProvideTextStyle(typography.title, content = content)
     }

@@ -14,7 +14,7 @@ import com.upnext.notabox.data.enitities.Task
 
 @Database(
     entities = [Note::class, Priority::class, Folder::class, Task::class],
-    version = 9
+    version = 10
 )
 @TypeConverters(
     PriorityTypeConverter::class,

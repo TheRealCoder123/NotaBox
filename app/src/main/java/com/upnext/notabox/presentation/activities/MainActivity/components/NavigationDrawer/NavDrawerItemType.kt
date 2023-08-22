@@ -2,8 +2,7 @@ package com.upnext.notabox.presentation.activities.MainActivity.components.Navig
 
 enum class NavDrawerItemType {
     Notes,
-    TO_DOS,
-    Priorities,
+    Tasks,
     Folders,
     Settings
 }

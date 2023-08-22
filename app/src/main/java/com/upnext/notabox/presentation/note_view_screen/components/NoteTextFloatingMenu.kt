@@ -35,17 +35,18 @@ import com.upnext.notabox.presentation.ui.theme.NotaBoxTheme
 
 @Composable
 fun NoteTextFloatingMenu(
+    modifier: Modifier = Modifier,
     isShowingFloatingMenu: Boolean,
     data: TextNoteData?,
-    onDoneEditing: (TextNoteData) -> Unit = {},
     onDelete: (TextNoteData) -> Unit = {},
     onAlignmentChange: (TextNoteData) -> Unit = {},
-    onTextSize: (TextNoteData) -> Unit = {}
+    onTextSize: (TextNoteData) -> Unit = {},
 ) {
 
     if (isShowingFloatingMenu && data != null){
         Box(
-            modifier = Modifier.padding(5.dp)
+            modifier = modifier.padding(5.dp),
+            contentAlignment = Alignment.Center
         ){
 
             Row(
@@ -112,22 +113,6 @@ fun NoteTextFloatingMenu(
                         tint = NotaBoxTheme.colors.iconTint
                     )
                 }
-
-                Spacer(
-                    modifier = Modifier
-                        .width(NotaBoxTheme.spaces.mediumLarge)
-                )
-
-                IconButton(onClick = {
-                    onDoneEditing(data)
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.DoneAll,
-                        contentDescription = "Text Done",
-                        tint = NotaBoxTheme.colors.iconTint
-                    )
-                }
-
             }
 
         }
@@ -139,6 +124,7 @@ fun NoteTextFloatingMenu(
 @Preview
 fun Preview() {
     NoteTextFloatingMenu(
+        modifier = Modifier,
         true,
         TextNoteData(
             IdentifierGenerator.generateNumberId(),

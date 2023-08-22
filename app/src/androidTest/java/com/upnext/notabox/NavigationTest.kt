@@ -44,7 +44,7 @@ class NavigationTest {
         composeRule.onNodeWithTag(TestTags.NAV_DRAWER_TEST_TAG).assertIsNotDisplayed()
         composeRule.onNodeWithContentDescription(appContext.getString(R.string.nav_icon)).performClick()
         composeRule.onNodeWithTag(TestTags.NAV_DRAWER_TEST_TAG).assertIsDisplayed()
-        composeRule.onNodeWithTag(NavDrawerItemType.TO_DOS.name).performClick()
+        composeRule.onNodeWithTag(NavDrawerItemType.Tasks.name).performClick()
         composeRule.onNodeWithTag(TestTags.ToDos_SCREEN_TEST_TAG).assertIsDisplayed()
     }
 

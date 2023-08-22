@@ -21,20 +21,25 @@ import com.upnext.notabox.domain.model.NoteData
 import com.upnext.notabox.domain.model.TextNoteData
 import com.upnext.notabox.domain.repository.NoteRepository
 import com.upnext.notabox.domain.enums.NoteDataType
+import com.upnext.notabox.domain.model.NoteImage
+import com.upnext.notabox.domain.model.NoteImageSize
 import com.upnext.notabox.presentation.note_view_screen.events.CreateNoteEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Collections
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateNoteViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
-    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = mutableStateOf(CreateNoteState())
     val state : State<CreateNoteState> = _state
+
+    private val MOVE_UP = -1
+    private val MOVE_DOWN = 1
 
     private val noteDataList = mutableListOf<NoteData>()
 
@@ -44,15 +49,16 @@ class CreateNoteViewModel @Inject constructor(
     val currentlyEditingNoteData = mutableStateOf<NoteData?>(null)
 
     val currentlyEditingText = mutableStateOf<TextNoteData?>(null)
-    val isTextNoteDataTextFieldFocused =  mutableStateOf(false)
     val isRecordingAudio = mutableStateOf(false)
+    val isPriorityDialogOpen = mutableStateOf(false)
     var isSelectFolderDialogVisible by mutableStateOf(false)
 
     val currentlyPlayingAudioFile = mutableStateOf<String?>("")
 
-    init {
-        val noteId = savedStateHandle.get<String>(Constants.NOTE_ID_TO_CREATE_NOTE_SCREEN)
-        val folderId = savedStateHandle.get<String>(Constants.FOLDER_ID_TO_CREATE_NOTE_SCREEN_IF_IS_CURRENTLY_FOLDER_SELECTED)?.toInt()
+    fun createNoteIfNoteCreated(
+        noteId: String?,
+        folderId: Int
+    ) {
         if (noteId != null && noteId != Constants.CREATE_NOTE_PARAM_PASSED_TO_CREATE_NOTE_SCREEN){
             onEvent(CreateNoteEvent.GetNoteEvent(noteId))
             Log.e("note creating", "note alr exists")
@@ -137,7 +143,12 @@ class CreateNoteViewModel @Inject constructor(
                 val noteData = NoteData(
                     noteDataList.size+1,
                     NoteDataType.Image,
-                    event.imageUri
+                    NoteImage(
+                        IdentifierGenerator.generateNumberId(),
+                        event.imageUri,
+                        "",
+                        NoteImageSize.MATCH_SCREEN
+                    )
                 )
                 noteDataList.add(noteData)
                 viewModelScope.launch {
@@ -228,6 +239,54 @@ class CreateNoteViewModel @Inject constructor(
                     noteRepository.addNoteToFolder(event.folderId, note?.id ?: "")
                 }
             }
+
+            is CreateNoteEvent.UpdateNoteImageSize -> {
+                val oldImageData = noteDataList.find { it.image?.imageID == event.image.imageID}
+                noteDataList.remove(oldImageData)
+                val newCheckBoxNoteData = NoteData(
+                    oldImageData?.order ?: 0,
+                    oldImageData?.type ?: NoteDataType.Image,
+                    image = event.image
+                )
+                noteDataList.add(newCheckBoxNoteData)
+                viewModelScope.launch {
+                    noteRepository.updateNoteData(noteDataList.distinct(), _state.value.newNote?.id!!)
+                }
+            }
+            is CreateNoteEvent.NoteDataMoveDown -> {
+                if (event.movingNoteData != null){
+                    val movingTextIndex = noteDataList.indexOf(event.movingNoteData)
+                    if (movingTextIndex < noteDataList.size - 1) { // Check if not at the bottom
+                        val downTextDataIndex = movingTextIndex + 1
+                        Collections.swap(noteDataList, movingTextIndex, downTextDataIndex)
+                        viewModelScope.launch {
+                            noteRepository.updateNoteData(noteDataList.distinct(), _state.value.newNote?.id!!)
+                        }
+                    }
+                }
+            }
+            is CreateNoteEvent.NoteDataMoveUp -> {
+                if (event.movingNoteData != null){
+                    val movingTextIndex = noteDataList.indexOf(event.movingNoteData)
+                    if (movingTextIndex > 0) { // Check if not at the top
+                        val upTextDataIndex = movingTextIndex - 1
+                        Collections.swap(noteDataList, movingTextIndex, upTextDataIndex)
+                        viewModelScope.launch {
+                            noteRepository.updateNoteData(noteDataList.distinct(), _state.value.newNote?.id!!)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun swapNoteData(sourceIndex: Int, targetIndex: Int) {
+        if (sourceIndex >= 0 && sourceIndex < noteDataList.size &&
+            targetIndex >= 0 && targetIndex < noteDataList.size) {
+
+            val sourceNoteData = noteDataList[sourceIndex]
+            noteDataList[sourceIndex] = noteDataList[targetIndex]
+            noteDataList[targetIndex] = sourceNoteData
         }
     }
 
